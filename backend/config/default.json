@@ -1,9 +1,0 @@
-{
-  "app": {
-    "name": "socketSpeak",
-    "version": "1.0.0"
-  },
-  "server": {
-    "port": "3000"
-  }
-}
