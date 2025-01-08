@@ -28,7 +28,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (req.accepts('html')) {
     res.status(statusCode).send(`${statusCode} - ${message}`)
   } else {
-    res.status(statusCode).json({error: message, statusCode})
+    res.status(statusCode).json({error: message, details: err.details || []})
   }
 })
 
