@@ -4,7 +4,7 @@ import { ObjectId } from "mongodb";
 // Define a Zod object schema for MongoDB ObjectId
 const objectIdSchema = z.instanceof(ObjectId);
 
-export const conversationSchema = z.object({
+export const conversationsZodSchema = z.object({
   _id: objectIdSchema.optional(),
   participants: z.array(objectIdSchema).min(1, "At least one participant is required"),
   messages: z.array(objectIdSchema).optional(),

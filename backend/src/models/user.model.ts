@@ -19,6 +19,7 @@ export const userSchema = {
       'username',
       'password',
       'gender',
+      'profilePic',
       'createdAt',
       'updatedAt',
     ],

@@ -5,7 +5,7 @@ import { ExpressError } from '../utils/ExpressError.js';
 
 export const validate = (schema: AnyZodObject) => (req: Request, res: Response, next: NextFunction) => {
   try {
-    schema.parse(req.body); // upadate with where data will be coming from
+    schema.parse(req.body);
     next();
   } catch(e: any) {
     // pass the error to the global error handling middleware

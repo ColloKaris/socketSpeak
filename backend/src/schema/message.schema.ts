@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 
 const objectIdSchema = z.instanceof(ObjectId);
 
-export const createMessageSchema = z.object({
+export const messagesZodSchema = z.object({
   _id: objectIdSchema.optional(),
   senderId: objectIdSchema,
   receiverId: objectIdSchema,

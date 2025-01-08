@@ -10,9 +10,7 @@ const app = express();
 const port = config.get<number>('server.port') || 3000;
 const dbUri = config.get<string>('database.dbUri');
 
-app.get('/', (req, res) => {
-  res.send('Hello world!');
-});
+app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
