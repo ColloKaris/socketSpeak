@@ -3,6 +3,7 @@ import { isUsernameTaken, registerUser } from '../services/auth.service.js';
 import { User } from '../models/user.model.js';
 import { addTimeStamps } from '../utils/db/addTimeStamps.js';
 import { ExpressError } from '../utils/ExpressError.js';
+import { generateTokenAndSetCookie } from '../utils/generateToken.js';
 
 export const signup = async (req: Request, res: Response) => {
   const { fullName, username, password, gender, profilePic } = req.body;
@@ -25,6 +26,7 @@ export const signup = async (req: Request, res: Response) => {
   const result = await registerUser(newUser);
 
   if (result?.acknowledged) {
+    generateTokenAndSetCookie(result.insertedId, res); //generate token after successfully creating a new user in the db
     res.status(201).json({ _id: result.insertedId });
   } else {
     throw new ExpressError('COULD NOT SIGNUP A USER', 500);
