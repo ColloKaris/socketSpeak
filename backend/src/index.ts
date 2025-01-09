@@ -20,7 +20,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err instanceof ExpressError ? err.statusCode : 500;
   const message = err.message || 'Something went wrong';
 
-  logger.error(`[ERROR] ${statusCode} - ${message}`);
+  // logger.error(`[ERROR] ${statusCode} - ${message}`);
 
   // check accept headers sent by the client to determine preferred media type in response
   if (req.accepts('html')) {

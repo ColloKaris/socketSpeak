@@ -11,6 +11,12 @@ export async function isUsernameTaken(username: string): Promise<boolean> {
   }
 }
 
+export async function doesUsernameExist(username: string) {
+  const user = await collections.users?.findOne({username});
+  return user;
+}
+
+
 export const registerUser = async (user: User) => {
   const hashedPassword = await hashPassword(user.password);
   user.password = hashedPassword;
