@@ -28,3 +28,20 @@ export async function createConversation(...participantIds: mongodb.ObjectId[]) 
   const result = await collections.conversations?.insertOne(timeStampedConversation);
   return result;
 };
+
+// populate conversation with the messages inside it
+export async function populateMessages(conversationId: mongodb.ObjectId) {
+  const query = {_id: conversationId};
+  const aggregationPipeline = [
+    {$match: query},
+    {$lookup: {
+      from: 'messages',
+      localField: 'messages',
+      foreignField: '_id',
+      as: 'chatMessages'
+    }},
+    {$unwind: "$chatMessages"}
+  ];
+  const conversationAsArray = await collections.conversations?.aggregate(aggregationPipeline).toArray();
+  return conversationAsArray;
+}

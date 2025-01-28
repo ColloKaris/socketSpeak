@@ -4,6 +4,7 @@ import {
   createConversation,
   findConversation,
   findConversationUsingId,
+  populateMessages,
 } from '../services/conversation.service.js';
 import { ExpressError } from '../utils/ExpressError.js';
 import { addTimeStamps } from '../utils/db/addTimeStamps.js';
@@ -63,4 +64,29 @@ export const sendMessage = async (req: Request, res: Response) => {
       500
     );
   };
+};
+
+export const getMessages = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userToChatId = new mongodb.ObjectId(id);
+
+  if (!req.user || !req.user._id) {
+    throw new ExpressError('User is not authenticated or lacks an ID.', 400);
+  };
+  const senderId = req.user._id;
+
+  const conversation = await findConversation(senderId, userToChatId);
+  if (!conversation) {
+    throw new ExpressError('The conversation is not available.', 400);
+  };
+
+  const populatedConversation = await populateMessages(conversation._id);
+  if(!populatedConversation) {
+    throw new ExpressError('Could not populate messages in the conversation', 500)
+  };
+
+  // Extract all chat Messages in the conversation
+  const messages = populatedConversation.map(conv => conv.chatMessages);
+
+  res.status(200).json( messages );
 };
