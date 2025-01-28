@@ -15,7 +15,7 @@ export const conversationSchema = {
     properties: {
       _id: {
         bsonType: 'objectId',
-        description: 'Unique id for a messaage in the database'
+        description: 'Unique id for a message in the database'
       },
       participants: {
         bsonType: 'array',

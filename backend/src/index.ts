@@ -1,19 +1,23 @@
 import express, { Request, Response, NextFunction } from 'express';
 import config from 'config';
+import cookieParser from 'cookie-parser';
 
 import { logger } from './utils/logger.js';
 import { authRoutes } from './routes/auth.routes.js';
 import { ExpressError } from './utils/ExpressError.js';
 import { connectToDatabase } from './utils/db/connectToDb.js';
+import { messageRouter } from './routes/message.routes.js';
 
 const app = express();
 const port = config.get<number>('server.port') || 3000;
 const dbUri = config.get<string>('database.dbUri');
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/messages', messageRouter);
 
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

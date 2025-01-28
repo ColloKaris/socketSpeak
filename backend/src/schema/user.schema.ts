@@ -16,3 +16,12 @@ export const usersZodSchema = z.object({
   createdAt: z.date().optional(),
   updatedAt: z.date().optional()
 });
+
+
+// create branch & switch
+// add
+// commit
+// switch main
+// merge branch with main
+// delete branch
+// push
