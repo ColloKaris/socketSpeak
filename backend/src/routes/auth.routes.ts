@@ -6,10 +6,10 @@ import { validate } from '../middleware/validateResource.js';
 import { usersZodSchema } from '../schema/user.schema.js';
 import { authZodSchema } from '../schema/auth.schema.js';
 
-export const authRoutes = express.Router({mergeParams: true});
+export const authRouter = express.Router({mergeParams: true});
 
-authRoutes.post('/signup', validate(usersZodSchema), wrapAsync(signup));
+authRouter.post('/signup', validate(usersZodSchema), wrapAsync(signup));
 
-authRoutes.post('/login', validate(authZodSchema), wrapAsync(login));
+authRouter.post('/login', validate(authZodSchema), wrapAsync(login));
 
-authRoutes.post('/logout', logout);
+authRouter.post('/logout', logout);

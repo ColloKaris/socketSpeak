@@ -2,11 +2,13 @@ import express, { Request, Response, NextFunction } from 'express';
 import config from 'config';
 import cookieParser from 'cookie-parser';
 
-import { logger } from './utils/logger.js';
-import { authRoutes } from './routes/auth.routes.js';
-import { ExpressError } from './utils/ExpressError.js';
 import { connectToDatabase } from './utils/db/connectToDb.js';
+import { logger } from './utils/logger.js';
+
+import { authRouter } from './routes/auth.routes.js';
+import { ExpressError } from './utils/ExpressError.js';
 import { messageRouter } from './routes/message.routes.js';
+import { userRouter } from './routes/user.routes.js';
 
 const app = express();
 const port = config.get<number>('server.port') || 3000;
@@ -16,8 +18,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRouter);
 app.use('/api/messages', messageRouter);
+app.use('/api/users', userRouter);
 
 // Error handling middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
