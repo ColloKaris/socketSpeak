@@ -11,7 +11,10 @@ import { addTimeStamps } from '../utils/db/addTimeStamps.js';
 import {
   addMessageToConversation,
   createMessage,
+  fetchMessage,
 } from '../services/message.service.js';
+import { getReceiverSocketId, io } from '../socket/socket.js';
+import { Message } from '../models/message.model.js';
 
 export const sendMessage = async (req: Request, res: Response) => {
   const { message } = req.body;
@@ -52,12 +55,27 @@ export const sendMessage = async (req: Request, res: Response) => {
     messageResult.insertedId
   );
 
+  let sentMessage: mongodb.WithId<Message>;
+
   if (
     updateResult?.acknowledged &&
     updateResult.matchedCount > 0 &&
     updateResult.modifiedCount > 0
   ) {
-    res.status(201).json({ messageId: messageResult.insertedId });
+    const result = await fetchMessage(messageResult.insertedId);
+    if (result) {
+      sentMessage = result;
+    } else {
+      throw new ExpressError('Could not fetch new message',500)
+    };
+
+    // Once messages has been added to the database, send it to the other user, using Socket.io
+    const receiverSocketId =  getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('newMessage', sentMessage)
+    }
+
+    res.status(201).json(sentMessage);
   } else {
     throw new ExpressError(
       'Failed to update conversation with the new message',
@@ -77,7 +95,8 @@ export const getMessages = async (req: Request, res: Response) => {
 
   const conversation = await findConversation(senderId, userToChatId);
   if (!conversation) {
-    throw new ExpressError('The conversation is not available.', 400);
+    res.status(200).json([]);
+    return;
   };
 
   const populatedConversation = await populateMessages(conversation._id);
@@ -87,6 +106,5 @@ export const getMessages = async (req: Request, res: Response) => {
 
   // Extract all chat Messages in the conversation
   const messages = populatedConversation.map(conv => conv.chatMessages);
-
   res.status(200).json( messages );
 };

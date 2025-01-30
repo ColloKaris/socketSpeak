@@ -8,6 +8,11 @@ export async function createMessage(message: Message) {
   return result;
 }
 
+export async function fetchMessage(messageId: ObjectId) {
+  const result = await collections.messages?.findOne({_id: messageId});
+  return result;
+}
+
 export async function addMessageToConversation(
   conversationId: ObjectId,
   messageId: ObjectId
