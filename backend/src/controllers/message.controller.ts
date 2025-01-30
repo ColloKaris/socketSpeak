@@ -20,11 +20,13 @@ export const sendMessage = async (req: Request, res: Response) => {
   const { message } = req.body;
   let { id } = req.params;
   const receiverId = new mongodb.ObjectId(id);
+  console.log('RECEIVER: ',receiverId);
 
   if (!req.user || !req.user._id) {
     throw new ExpressError('User is not authenticated or lacks an ID.', 400);
   }
   const senderId = req.user._id;
+  console.log('SENDER: ', senderId)
 
   // Step 1: find conversation between the 2 users
   let conversation = await findConversation(receiverId, senderId);
@@ -70,7 +72,8 @@ export const sendMessage = async (req: Request, res: Response) => {
     };
 
     // Once messages has been added to the database, send it to the other user, using Socket.io
-    const receiverSocketId =  getReceiverSocketId(receiverId);
+    const receiverSocketId =  getReceiverSocketId(receiverId.toString());
+
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('newMessage', sentMessage)
     }

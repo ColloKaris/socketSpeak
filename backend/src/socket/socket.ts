@@ -19,27 +19,32 @@ export const io = new Server(expressServer, {
   },
 });
 
-export const getReceiverSocketId = (userId: mongodb.ObjectId) => {
-  return userSocketMap.userId;
-}
+// Define a mapping of userId (string) to socketId (string)
+const userSocketMap: Record<string, string> = {};
 
-// used to get users that are online
-const userSocketMap: {userId?: string} = {}; // {userId: socketId}
+// Function to get the socket ID of a receiver
+export const getReceiverSocketId = (receiverId: string): string | undefined => {
+  return userSocketMap[receiverId];
+};
 
-io.on('connection', (socket) => {
-  //logger.info(`A user connected. Id: ${socket.id.substring(0,5)}`);
+io.on("connection", (socket) => {
 
-  const userId = socket.handshake.query.userId;
-  if(userId) {
-    userSocketMap.userId = socket.id;
-  };
+  // Get userId from socket handshake query
+  const userId = socket.handshake.query.userId as string | undefined;
 
-  // send event to all connected clients
-  io.emit('getOnlineUsers', Object.keys(userSocketMap));
+  if (userId && userId !== "undefined") {
+    userSocketMap[userId] = socket.id;
+  }
 
-  socket.on('disconnect', () => {
-    //logger.info(`User disconnected. Id: ${socket.id.substring(0,5)}`);
-    delete userSocketMap.userId;
-    io.emit('getOnlineUsers', Object.keys(userSocketMap));
-  })
-})
+  // Emit online users to all connected clients
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
+
+  // Handle user disconnection
+  socket.on("disconnect", () => {
+    console.log("User disconnected", socket.id);
+    if (userId) {
+      delete userSocketMap[userId];
+      io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    }
+  });
+});
