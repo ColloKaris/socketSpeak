@@ -30,6 +30,7 @@ In this project, the backend was built by [Collins Kariuki](https://github.com/C
 - Model-view-controller architecture for clear separation of concerns and improved maintainability.
 - Zod and MongoDB Json Schema validation to validate all data before processing or storage in the database.
 - Implementation of RESTful APIs.
+- The application indicates the users that are currently online. These are all active socket connections.
 
 ## Tech Stack:
 
@@ -42,3 +43,21 @@ In this project, the backend was built by [Collins Kariuki](https://github.com/C
 - **Logging**: Pino
 
 ## Screenshots 📸
+### Sign Up Page
+![Sign Up Page](https://res.cloudinary.com/dvmtn1i7u/image/upload/v1738235176/SignupPag_zuiait.png)
+
+### Login Page
+![Login Page](https://res.cloudinary.com/dvmtn1i7u/image/upload/v1738235244/loginPage_m7twum.png)
+
+### Landing Page After Succesful Login
+The page has a side panel that shows all the available users. Users that are currently online have a green dot beside their profile picture. For example, from the screenshot below, Daisy is currently online.
+![Landing Page](https://res.cloudinary.com/dvmtn1i7u/image/upload/v1738235347/LandingAfterLogin_t4l16s.png)
+
+### Messaging page after clicking on a user
+![Messaging Page](https://res.cloudinary.com/dvmtn1i7u/image/upload/v1738235688/SelectUserToChat_fgl9wx.png)
+
+### Sample chat between two Users
+![Chat Message](https://res.cloudinary.com/dvmtn1i7u/image/upload/v1738235915/sampleTexting_xoj7qe.png)
+
+### An Example of a Conversation Between Two Users
+![Conversation](https://res.cloudinary.com/dvmtn1i7u/image/upload/v1738236137/sampleConversation_fui5fg.png)
